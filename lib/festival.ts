@@ -5,7 +5,7 @@ export const FESTIVAL = {
 
 // Capacité par défaut si aucun besoin spécifique n'est défini pour une combinaison
 // poste/jour/créneau (voir SLOT_CAPACITY_OVERRIDES ci-dessous).
-export const DEFAULT_SLOT_CAPACITY = 2
+export const DEFAULT_SLOT_CAPACITY = 1
 
 // Besoins en bénévoles par poste et par créneau, issus du fichier
 // "Besoins_en_bénévoles.xlsx" fourni par la coordination.
@@ -57,6 +57,24 @@ export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
   "Plonge|Samedi 7 novembre 2026|22h00 – 00h00": 1,
   "Cuisine|Samedi 7 novembre 2026|22h00 – 00h00": 1,
   "Crêpes|Samedi 7 novembre 2026|22h00 – 00h00": 1,
+
+  "Service|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
+  "Entretien|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
+  "Plonge|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
+  "Cuisine|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
+  "Crêpes|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
+
+  "Service|Dimanche 8 novembre 2026|12h00 – 14h00": 2,
+  "Entretien|Dimanche 8 novembre 2026|12h00 – 14h00": 1,
+  "Plonge|Dimanche 8 novembre 2026|12h00 – 14h00": 1,
+  "Cuisine|Dimanche 8 novembre 2026|12h00 – 14h00": 2,
+  "Crêpes|Dimanche 8 novembre 2026|12h00 – 14h00": 1,
+
+  "Service|Dimanche 8 novembre 2026|18h00 – 20h00": 2,
+  "Entretien|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
+  "Plonge|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
+  "Cuisine|Dimanche 8 novembre 2026|18h00 – 20h00": 2,
+  "Crêpes|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
 }
 
 /** Nombre maximum de bénévoles pour une combinaison poste/jour/créneau donnée. */

@@ -21,12 +21,14 @@ export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
   "Plonge|Samedi 7 novembre 2026|10h00 – 12h00": 1,
   "Cuisine|Samedi 7 novembre 2026|10h00 – 12h00": 1,
   "Crêpes|Samedi 7 novembre 2026|10h00 – 12h00": 1,
+  "Animation|Samedi 7 novembre 2026|10h00 – 12h00": 1,
 
   "Service|Samedi 7 novembre 2026|12h00 – 14h00": 2,
   "Entretien|Samedi 7 novembre 2026|12h00 – 14h00": 1,
   "Plonge|Samedi 7 novembre 2026|12h00 – 14h00": 1,
   "Cuisine|Samedi 7 novembre 2026|12h00 – 14h00": 2,
   "Crêpes|Samedi 7 novembre 2026|12h00 – 14h00": 1,
+  "Animation|Samedi 7 novembre 2026|12h00 – 14h00": 4,
 
   "Service|Samedi 7 novembre 2026|14h00 – 16h00": 1,
   "Entretien|Samedi 7 novembre 2026|14h00 – 16h00": 1,
@@ -88,6 +90,7 @@ export const POSTES = [
   { id: "cuisine", label: "Cuisine", description: "Préparation et dressage des plats" },
   { id: "plonge", label: "Plonge", description: "Vaisselle et nettoyage de la vaisselle" },
   { id: "entretien", label: "Entretien", description: "Nettoyage des sanitaires et gestion des poubelles" },
+  { id: "animation", label: "Animation", description: "Explication des jeux" },
 ] as const
 
 // Créneau de préparation avant l'ouverture du stand, proposé chaque jour du festival.

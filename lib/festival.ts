@@ -109,7 +109,7 @@ export const JOURS = [
   {
     id: "dim",
     label: "Dimanche 8 novembre 2026",
-    creneaux: ["10h00 – 12h00", "12h00 – 14h00", "14h00 – 16h00", "16h00 – 18h00", "22h00 – 00h00"],
+    creneaux: ["10h00 – 12h00", "12h00 – 14h00", "14h00 – 16h00", "16h00 – 18h00", "18h00 – 20h00"],
   },
 ] as const
 

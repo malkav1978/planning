@@ -1,5 +1,5 @@
 export const FESTIVAL = {
-  name: "Festival — Pôle Restauration",
+  name: "Fessti'Jeux — Pôle Restauration",
   edition: "Édition 2026",
 }
 

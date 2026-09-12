@@ -19,10 +19,10 @@ export default async function Page() {
             {FESTIVAL.name}
           </div>
           <h1 className="font-serif text-3xl leading-tight text-balance sm:text-4xl">
-            Devenez bénévole du pôle restauration
+            Devenez bénévole du Fessti'Jeux
           </h1>
           <p className="max-w-xl text-pretty leading-relaxed text-primary-foreground/85">
-            Rejoignez l&apos;équipe qui régale le festival ! Choisissez les postes et les
+            Rejoignez l&apos;équipe qui régale le festival&nbsp;!<p/>Choisissez les postes et les
             créneaux qui vous conviennent — {JOURS.map((j) => j.label).join(" et ")}.
           </p>
           <p className="text-sm text-primary-foreground/70">{FESTIVAL.edition}</p>

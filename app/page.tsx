@@ -22,10 +22,9 @@ export default async function Page() {
             Devenez bénévole du Fessti'Jeux
           </h1>
           <p className="max-w-xl text-pretty leading-relaxed text-primary-foreground/85">
-            Rejoignez l&apos;équipe qui régale le festival&nbsp;!<p/>Choisissez les postes et les
-            créneaux qui vous conviennent — {JOURS.map((j) => j.label).join(" et ")}.
+            Rejoignez l&apos;équipe qui régale le festival&nbsp;! — {JOURS.map((j) => j.label).join(" et ")}.<p />
+            Choisissez les postes et les créneaux qui vous conviennent.
           </p>
-          <p className="text-sm text-primary-foreground/70">{FESTIVAL.edition}</p>
         </div>
       </header>
 

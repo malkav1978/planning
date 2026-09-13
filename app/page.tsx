@@ -27,8 +27,7 @@ export default async function Page() {
             Devenez bénévole du Fessti'Jeux
           </h1>
           <p className="max-w-xl text-pretty leading-relaxed text-primary-foreground/85">
-            {JOURS.map((j) => j.label).join(" et ")}.<p />
-            Rejoignez l&apos;équipe qui régale le festival&nbsp;! Choisissez les postes
+            Du 6 au 8 novembre 2026, rejoignez l&apos;équipe qui régale le festival&nbsp;! Choisissez les postes
             et les créneaux qui vous conviennent.
           </p>
         </div>

@@ -1,28 +1,26 @@
 import { Fragment } from "react"
-import { JOURS, POSTES, PREPA, getSlotCapacity } from "@/lib/festival"
+import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
 import { slotKey, type SlotOccupancy } from "@/lib/signups"
-
-type Column = { key: string; label: string }
 
 function Cell({
   occupancy,
   poste,
   jour,
   creneau,
-  applicable,
 }: {
   occupancy: Map<string, SlotOccupancy>
   poste: string
   jour: string
   creneau: string
-  applicable: boolean
 }) {
-  if (!applicable) {
+  const capacity = getSlotCapacity(poste, jour, creneau)
+
+  if (capacity === 0) {
     return <td className="border border-border px-3 py-2 text-center text-xs text-muted-foreground/60">Fermé</td>
   }
 
   const names = occupancy.get(slotKey(poste, jour, creneau))?.names ?? []
-  const freeSlots = Math.max(0, getSlotCapacity(poste, jour, creneau) - names.length)
+  const freeSlots = Math.max(0, capacity - names.length)
 
   return (
     <td className="border border-border px-3 py-2 align-top text-xs">
@@ -42,11 +40,9 @@ function Cell({
   )
 }
 
+/** Tableau récap des postes du stand (hors mise en place). */
 export function SlotsRecapTable({ occupancy }: { occupancy: Map<string, SlotOccupancy> }) {
-  const columns: Column[] = [
-    { key: PREPA.label, label: PREPA.label },
-    ...POSTES.map((p) => ({ key: p.label, label: p.label })),
-  ]
+  const jours = JOURS.filter((jour) => jour.creneaux.length > 0)
 
   return (
     <div className="overflow-x-auto rounded-xl border border-border">
@@ -56,36 +52,23 @@ export function SlotsRecapTable({ occupancy }: { occupancy: Map<string, SlotOccu
             <th className="sticky left-0 border border-border bg-secondary px-3 py-2 font-medium text-secondary-foreground">
               Créneaux
             </th>
-            {columns.map((col) => (
-              <th key={col.key} className="border border-border px-3 py-2 font-medium text-secondary-foreground">
-                {col.label}
+            {POSTES.map((poste) => (
+              <th key={poste.id} className="border border-border px-3 py-2 font-medium text-secondary-foreground">
+                {poste.label}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {JOURS.map((jour) => (
+          {jours.map((jour) => (
             <Fragment key={jour.id}>
               <tr className="bg-muted">
-                <td colSpan={columns.length + 1} className="border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                <td
+                  colSpan={POSTES.length + 1}
+                  className="border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                >
                   📅 {jour.label}
                 </td>
-              </tr>
-
-              <tr>
-                <td className="sticky left-0 whitespace-nowrap border border-border bg-background px-3 py-2 text-xs text-foreground">
-                  {PREPA.creneau}
-                </td>
-                {columns.map((col) => (
-                  <Cell
-                    key={col.key}
-                    occupancy={occupancy}
-                    poste={col.key}
-                    jour={jour.label}
-                    creneau={PREPA.creneau}
-                    applicable={col.key === PREPA.label}
-                  />
-                ))}
               </tr>
 
               {jour.creneaux.map((creneau) => (
@@ -93,19 +76,44 @@ export function SlotsRecapTable({ occupancy }: { occupancy: Map<string, SlotOccu
                   <td className="sticky left-0 whitespace-nowrap border border-border bg-background px-3 py-2 text-xs text-foreground">
                     {creneau}
                   </td>
-                  {columns.map((col) => (
-                    <Cell
-                      key={col.key}
-                      occupancy={occupancy}
-                      poste={col.key}
-                      jour={jour.label}
-                      creneau={creneau}
-                      applicable={col.key !== PREPA.label}
-                    />
+                  {POSTES.map((poste) => (
+                    <Cell key={poste.id} occupancy={occupancy} poste={poste.label} jour={jour.label} creneau={creneau} />
                   ))}
                 </tr>
               ))}
             </Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/** Tableau récap séparé pour le créneau de mise en place (absent certains jours). */
+export function PrepaRecapTable({ occupancy }: { occupancy: Map<string, SlotOccupancy> }) {
+  const rows = JOURS.map((jour) => ({ jour, creneau: getPrepaCreneau(jour.id) })).filter(
+    (row): row is { jour: (typeof JOURS)[number]; creneau: string } => Boolean(row.creneau),
+  )
+
+  if (rows.length === 0) return null
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-border">
+      <table className="w-full min-w-[420px] border-collapse text-left text-sm">
+        <thead>
+          <tr className="bg-secondary">
+            <th className="border border-border px-3 py-2 font-medium text-secondary-foreground">Jour</th>
+            <th className="border border-border px-3 py-2 font-medium text-secondary-foreground">Créneau</th>
+            <th className="border border-border px-3 py-2 font-medium text-secondary-foreground">Bénévoles</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(({ jour, creneau }) => (
+            <tr key={jour.id}>
+              <td className="whitespace-nowrap border border-border px-3 py-2 text-xs text-foreground">{jour.label}</td>
+              <td className="whitespace-nowrap border border-border px-3 py-2 text-xs text-foreground">{creneau}</td>
+              <Cell occupancy={occupancy} poste={PREPA.label} jour={jour.label} creneau={creneau} />
+            </tr>
           ))}
         </tbody>
       </table>

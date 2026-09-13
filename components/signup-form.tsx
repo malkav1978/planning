@@ -2,7 +2,7 @@
 
 import { useActionState, useMemo, useState } from "react"
 import { useFormStatus } from "react-dom"
-import { JOURS, POSTES, PREPA, getSlotCapacity } from "@/lib/festival"
+import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
 import { submitSignup, type SignupState } from "@/app/actions/signup"
 import { Button } from "@/components/ui/button"
 import { Check, Loader2, MapPin, PartyPopper, X } from "lucide-react"
@@ -96,8 +96,9 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              {JOURS.map((jour) => {
-                const slot: Slot = { poste: PREPA.label, jour: jour.label, creneau: PREPA.creneau }
+              {JOURS.filter((jour) => getPrepaCreneau(jour.id)).map((jour) => {
+                const prepaCreneau = getPrepaCreneau(jour.id)!
+                const slot: Slot = { poste: PREPA.label, jour: jour.label, creneau: prepaCreneau }
                 const checked = selectedKeys.has(slotKey(slot))
                 const full = isFull(slot) && !checked
                 return (
@@ -108,7 +109,7 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
                     </p>
                     {full ? (
                       <span className="flex items-center justify-between gap-2 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
-                        {PREPA.creneau}
+                        {prepaCreneau}
                         <span className="text-xs font-medium">Complet</span>
                       </span>
                     ) : (
@@ -135,7 +136,7 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
                         >
                           {checked && <Check className="size-3" />}
                         </span>
-                        {PREPA.creneau}
+                        {prepaCreneau}
                       </label>
                     )}
                   </div>
@@ -156,7 +157,7 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                {JOURS.map((jour) => {
+                {JOURS.filter((jour) => jour.creneaux.length > 0).map((jour) => {
                   const visibleCreneaux = jour.creneaux.filter(
                     (creneau) =>
                       !isFull({ poste: poste.label, jour: jour.label, creneau }) ||

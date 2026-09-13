@@ -1,7 +1,7 @@
 import { desc } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { volunteerSignups } from "@/lib/db/schema"
-import { JOURS, POSTES, PREPA } from "@/lib/festival"
+import { JOURS, POSTES, PREPA, getPrepaCreneau } from "@/lib/festival"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { AdminLoginForm } from "@/app/admin/login-form"
 import { adminLogout } from "@/app/admin/actions"
@@ -41,8 +41,10 @@ export default async function AdminPage() {
     }
   }
   for (const jour of JOURS) {
-    const key = `${PREPA.label}|${jour.label}|${PREPA.creneau}`
-    buckets.set(key, { poste: PREPA.label, jour: jour.label, creneau: PREPA.creneau, names: [] })
+    const prepaCreneau = getPrepaCreneau(jour.id)
+    if (!prepaCreneau) continue
+    const key = `${PREPA.label}|${jour.label}|${prepaCreneau}`
+    buckets.set(key, { poste: PREPA.label, jour: jour.label, creneau: prepaCreneau, names: [] })
   }
 
   let totalSlotSignups = 0

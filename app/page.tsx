@@ -1,10 +1,15 @@
 import { SignupForm } from "@/components/signup-form"
-import { SlotsRecapTable } from "@/components/slots-recap-table"
+import { PrepaRecapTable, SlotsRecapTable } from "@/components/slots-recap-table"
 import { FESTIVAL, JOURS } from "@/lib/festival"
 import { getSlotOccupancy, occupancyToPlainNames } from "@/lib/signups"
 import { UtensilsCrossed } from "lucide-react"
 
 export const dynamic = "force-dynamic"
+
+function formatJoursList(labels: string[]) {
+  if (labels.length <= 1) return labels.join("")
+  return `${labels.slice(0, -1).join(", ")} et ${labels[labels.length - 1]}`
+}
 
 export default async function Page() {
   const occupancy = await getSlotOccupancy()
@@ -40,6 +45,18 @@ export default async function Page() {
             </p>
           </div>
           <SlotsRecapTable occupancy={occupancy} />
+        </section>
+
+        <section aria-labelledby="recap-prepa-title">
+          <div className="mb-4">
+            <h2 id="recap-prepa-title" className="font-serif text-2xl text-foreground">
+              Mise en place
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              Installation du stand avant l&apos;ouverture au public.
+            </p>
+          </div>
+          <PrepaRecapTable occupancy={occupancy} />
         </section>
 
         <SignupForm occupancy={occupancyNames} />

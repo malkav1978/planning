@@ -5,7 +5,7 @@ export const FESTIVAL = {
 
 // Capacité par défaut si aucun besoin spécifique n'est défini pour une combinaison
 // poste/jour/créneau (voir SLOT_CAPACITY_OVERRIDES ci-dessous).
-export const DEFAULT_SLOT_CAPACITY = 1
+export const DEFAULT_SLOT_CAPACITY = 2
 
 // Besoins en bénévoles par poste et par créneau, issus du fichier
 // "Besoins_en_bénévoles.xlsx" fourni par la coordination.
@@ -21,14 +21,12 @@ export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
   "Plonge|Samedi 7 novembre 2026|10h00 – 12h00": 1,
   "Cuisine|Samedi 7 novembre 2026|10h00 – 12h00": 1,
   "Crêpes|Samedi 7 novembre 2026|10h00 – 12h00": 1,
-  "Animation|Samedi 7 novembre 2026|10h00 – 12h00": 1,
 
   "Service|Samedi 7 novembre 2026|12h00 – 14h00": 2,
   "Entretien|Samedi 7 novembre 2026|12h00 – 14h00": 1,
   "Plonge|Samedi 7 novembre 2026|12h00 – 14h00": 1,
   "Cuisine|Samedi 7 novembre 2026|12h00 – 14h00": 2,
   "Crêpes|Samedi 7 novembre 2026|12h00 – 14h00": 1,
-  "Animation|Samedi 7 novembre 2026|12h00 – 14h00": 4,
 
   "Service|Samedi 7 novembre 2026|14h00 – 16h00": 1,
   "Entretien|Samedi 7 novembre 2026|14h00 – 16h00": 1,
@@ -59,24 +57,6 @@ export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
   "Plonge|Samedi 7 novembre 2026|22h00 – 00h00": 1,
   "Cuisine|Samedi 7 novembre 2026|22h00 – 00h00": 1,
   "Crêpes|Samedi 7 novembre 2026|22h00 – 00h00": 1,
-
-  "Service|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
-  "Entretien|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
-  "Plonge|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
-  "Cuisine|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
-  "Crêpes|Dimanche 8 novembre 2026|10h00 – 12h00": 1,
-
-  "Service|Dimanche 8 novembre 2026|12h00 – 14h00": 2,
-  "Entretien|Dimanche 8 novembre 2026|12h00 – 14h00": 1,
-  "Plonge|Dimanche 8 novembre 2026|12h00 – 14h00": 1,
-  "Cuisine|Dimanche 8 novembre 2026|12h00 – 14h00": 2,
-  "Crêpes|Dimanche 8 novembre 2026|12h00 – 14h00": 1,
-
-  "Service|Dimanche 8 novembre 2026|18h00 – 20h00": 2,
-  "Entretien|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
-  "Plonge|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
-  "Cuisine|Dimanche 8 novembre 2026|18h00 – 20h00": 2,
-  "Crêpes|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
 }
 
 /** Nombre maximum de bénévoles pour une combinaison poste/jour/créneau donnée. */
@@ -90,29 +70,49 @@ export const POSTES = [
   { id: "cuisine", label: "Cuisine", description: "Préparation et dressage des plats" },
   { id: "plonge", label: "Plonge", description: "Vaisselle et nettoyage de la vaisselle" },
   { id: "entretien", label: "Entretien", description: "Nettoyage des sanitaires et gestion des poubelles" },
-  { id: "animation", label: "Animation", description: "Explication des jeux" },
 ] as const
 
-// Créneau de préparation avant l'ouverture du stand, proposé chaque jour du festival.
 export const PREPA = {
   id: "prepa",
   label: "Mise en place",
   description: "Installation du stand avant l'ouverture au public",
-  creneau: "8h00 – 10h00",
 } as const
 
+// Créneau de mise en place par jour. Une clé absente signifie qu'il n'y a pas
+// de mise en place ce jour-là (ex : le dimanche).
+export const PREPA_CRENEAUX: Partial<Record<JourId, string>> = {
+  ven: "18h00 – 20h00",
+  sam: "8h00 – 10h00",
+}
+
+/** Créneau de mise en place pour ce jour, ou undefined s'il n'y en a pas. */
+export function getPrepaCreneau(jourId: JourId): string | undefined {
+  return PREPA_CRENEAUX[jourId]
+}
+
 export const JOURS = [
+  {
+    id: "ven",
+    label: "Vendredi 6 novembre 2026",
+    creneaux: [] as string[],
+  },
   {
     id: "sam",
     label: "Samedi 7 novembre 2026",
     creneaux: [
-      "10h00 – 12h00", "12h00 – 14h00", "14h00 – 16h00", "16h00 – 18h00", "18h00 – 20h00", "20h00 – 22h00", "22h00 – 00h00",
+      "10h00 – 12h00",
+      "12h00 – 14h00",
+      "14h00 – 16h00",
+      "16h00 – 18h00",
+      "18h00 – 20h00",
+      "20h00 – 22h00",
+      "22h00 – 00h00",
     ],
   },
   {
     id: "dim",
     label: "Dimanche 8 novembre 2026",
-    creneaux: ["10h00 – 12h00", "12h00 – 14h00", "14h00 – 16h00", "16h00 – 18h00", "18h00 – 20h00"],
+    creneaux: ["10h00 – 12h00", "12h00 – 14h00", "14h00 – 16h00", "16h00 – 18h00"],
   },
 ] as const
 

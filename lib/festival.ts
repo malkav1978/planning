@@ -92,12 +92,6 @@ export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
   "Cuisine|Dimanche 8 novembre 2026|16h00 – 18h00": 1,
   "Plonge|Dimanche 8 novembre 2026|16h00 – 18h00": 1,
   "Entretien|Dimanche 8 novembre 2026|16h00 – 18h00": 1,
-
-  "Crêpes|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
-  "Service|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
-  "Cuisine|Dimanche 8 novembre 2026|18h00 – 20h00": 2,
-  "Plonge|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
-  "Entretien|Dimanche 8 novembre 2026|18h00 – 20h00": 1,
 }
 
 /** Nombre maximum de bénévoles pour une combinaison poste/jour/créneau donnée. */
@@ -124,6 +118,7 @@ export const PREPA = {
 // désormais modélisé comme un besoin normal par poste (voir SLOT_CAPACITY_OVERRIDES).
 export const PREPA_CRENEAUX: Partial<Record<JourId, string>> = {
   ven: "18h00 – 20h00",
+  sam: "8h00 – 10h00",
 }
 
 /** Créneau de mise en place pour ce jour, ou undefined s'il n'y en a pas. */

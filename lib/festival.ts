@@ -15,6 +15,10 @@ export const DEFAULT_SLOT_CAPACITY = 2
 // Une capacité de 0 signifie que le poste est fermé sur ce créneau (ex : Crêpes
 // à 8h-10h) — affiché "Fermé" plutôt que "Libre" dans les tableaux récap.
 export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
+  // Mise en place (appel générique, en plus des besoins par poste ci-dessous).
+  "Mise en place|Vendredi 6 novembre 2026|18h00 – 20h00": 10,
+  "Mise en place|Samedi 7 novembre 2026|8h00 – 10h00": 10,
+
   "Crêpes|Samedi 7 novembre 2026|8h00 – 10h00": 0,
   "Service|Samedi 7 novembre 2026|8h00 – 10h00": 1,
   "Cuisine|Samedi 7 novembre 2026|8h00 – 10h00": 2,
@@ -114,8 +118,9 @@ export const PREPA = {
 } as const
 
 // Créneau de mise en place par jour. Une clé absente signifie qu'il n'y a pas
-// de mise en place ce jour-là. Le samedi matin n'y figure plus : ce créneau est
-// désormais modélisé comme un besoin normal par poste (voir SLOT_CAPACITY_OVERRIDES).
+// de mise en place ce jour-là. Ce créneau générique coexiste, le samedi, avec
+// les besoins normaux par poste sur le même horaire (voir SLOT_CAPACITY_OVERRIDES) :
+// les deux appels à bénévoles sont distincts et se cumulent.
 export const PREPA_CRENEAUX: Partial<Record<JourId, string>> = {
   ven: "18h00 – 20h00",
   sam: "8h00 – 10h00",

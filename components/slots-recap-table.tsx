@@ -24,14 +24,20 @@ function Cell({
 
   return (
     <td className="border border-border px-3 py-2 align-top text-xs">
-      <div className="flex flex-col gap-0.5">
+      <div className="flex flex-wrap gap-1">
         {names.map((name, i) => (
-          <span key={i} className="text-foreground">
+          <span
+            key={i}
+            className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 font-medium text-foreground"
+          >
             {name}
           </span>
         ))}
         {Array.from({ length: freeSlots }).map((_, i) => (
-          <span key={`free-${i}`} className="italic text-muted-foreground">
+          <span
+            key={`free-${i}`}
+            className="inline-flex items-center rounded-full border border-dashed border-border px-2.5 py-1 italic text-muted-foreground"
+          >
             Libre
           </span>
         ))}

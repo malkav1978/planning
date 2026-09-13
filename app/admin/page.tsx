@@ -1,7 +1,7 @@
 import { desc } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { volunteerSignups } from "@/lib/db/schema"
-import { JOURS, POSTES, PREPA, getPrepaCreneau } from "@/lib/festival"
+import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { AdminLoginForm } from "@/app/admin/login-form"
 import { adminLogout } from "@/app/admin/actions"
@@ -35,6 +35,7 @@ export default async function AdminPage() {
   for (const poste of POSTES) {
     for (const jour of JOURS) {
       for (const creneau of jour.creneaux) {
+        if (getSlotCapacity(poste.label, jour.label, creneau) === 0) continue
         const key = `${poste.label}|${jour.label}|${creneau}`
         buckets.set(key, { poste: poste.label, jour: jour.label, creneau, names: [] })
       }

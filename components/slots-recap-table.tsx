@@ -13,8 +13,14 @@ function Cell({
   jour: string
   creneau: string
 }) {
+  const capacity = getSlotCapacity(poste, jour, creneau)
+
+  if (capacity === 0) {
+    return <td className="border border-border px-3 py-2 text-center text-xs text-muted-foreground/60">Fermé</td>
+  }
+
   const names = occupancy.get(slotKey(poste, jour, creneau))?.names ?? []
-  const freeSlots = Math.max(0, getSlotCapacity(poste, jour, creneau) - names.length)
+  const freeSlots = Math.max(0, capacity - names.length)
 
   return (
     <td className="border border-border px-3 py-2 align-top text-xs">

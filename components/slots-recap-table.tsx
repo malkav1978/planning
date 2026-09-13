@@ -28,7 +28,7 @@ function Cell({
         {names.map((name, i) => (
           <span
             key={i}
-            className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 font-medium text-foreground"
+            className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 font-medium text-emerald-800"
           >
             {name}
           </span>

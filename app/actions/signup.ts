@@ -147,6 +147,6 @@ export async function submitSignup(
 
   return {
     status: "success",
-    message: `Merci ${firstName} ! Votre inscription pour ${accepted.length} créneau${accepted.length > 1 ? "x" : ""} a bien été enregistrée.${fullNote}`,
+    message: `Merci ${firstName}&nbsp;! Votre inscription pour ${accepted.length} créneau${accepted.length > 1 ? "x" : ""} a bien été enregistrée.${fullNote}`,
   }
 }

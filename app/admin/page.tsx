@@ -1,7 +1,7 @@
 import { desc } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { volunteerSignups } from "@/lib/db/schema"
-import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
+import { GENERIC_ROLES, JOURS, POSTES, getGenericRoleCreneau, getSlotCapacity } from "@/lib/festival"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { AdminLoginForm } from "@/app/admin/login-form"
 import { adminLogout } from "@/app/admin/actions"
@@ -41,11 +41,13 @@ export default async function AdminPage() {
       }
     }
   }
-  for (const jour of JOURS) {
-    const prepaCreneau = getPrepaCreneau(jour.id)
-    if (!prepaCreneau) continue
-    const key = `${PREPA.label}|${jour.label}|${prepaCreneau}`
-    buckets.set(key, { poste: PREPA.label, jour: jour.label, creneau: prepaCreneau, names: [] })
+  for (const role of GENERIC_ROLES) {
+    for (const jour of JOURS) {
+      const creneau = getGenericRoleCreneau(role, jour.id)
+      if (!creneau) continue
+      const key = `${role.label}|${jour.label}|${creneau}`
+      buckets.set(key, { poste: role.label, jour: jour.label, creneau, names: [] })
+    }
   }
 
   let totalSlotSignups = 0
@@ -72,7 +74,7 @@ export default async function AdminPage() {
     bucketsByJourAndPoste.set(groupKey, list)
   }
 
-  const posteOrder = [PREPA.label, ...POSTES.map((p) => p.label)]
+  const posteOrder = [...GENERIC_ROLES.map((r) => r.label), ...POSTES.map((p) => p.label)]
 
   return (
     <main className="min-h-dvh">

@@ -18,6 +18,7 @@ export const SLOT_CAPACITY_OVERRIDES: Record<string, number> = {
   // Mise en place (appel générique, en plus des besoins par poste ci-dessous).
   "Mise en place|Vendredi 6 novembre 2026|18h00 – 20h00": 10,
   "Mise en place|Samedi 7 novembre 2026|8h00 – 10h00": 10,
+  "Rangement|Dimanche 8 novembre 2026|18h00 – Fin": 10,
 
   "Crêpes|Samedi 7 novembre 2026|8h00 – 10h00": 0,
   "Service|Samedi 7 novembre 2026|8h00 – 10h00": 1,

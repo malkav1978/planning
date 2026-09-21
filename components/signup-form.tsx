@@ -68,7 +68,7 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
           {state.message}
         </p>
         <p className="mt-4 text-sm text-muted-foreground">
-          Les plannings peuvent évoluer jusqu'au dernier moment, un coordinateur reviendra vers vous avec les détails de votre affectation.
+          Les plannings peuvent évolués jusqu'au dernier moment, un coordinateur reviendra vers vous avec les détails de votre affectation.
         </p>
       </div>
     )

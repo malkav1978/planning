@@ -1,5 +1,5 @@
 import { Fragment } from "react"
-import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
+import { JOURS, POSTES, getGenericRoleCreneau, getSlotCapacity, type GenericRole } from "@/lib/festival"
 import { slotKey, type SlotOccupancy } from "@/lib/signups"
 
 function Cell({
@@ -95,9 +95,15 @@ export function SlotsRecapTable({ occupancy }: { occupancy: Map<string, SlotOccu
   )
 }
 
-/** Tableau récap séparé pour le créneau de mise en place (absent certains jours). */
-export function PrepaRecapTable({ occupancy }: { occupancy: Map<string, SlotOccupancy> }) {
-  const rows = JOURS.map((jour) => ({ jour, creneau: getPrepaCreneau(jour.id) })).filter(
+/** Tableau récap séparé pour un rôle générique (Mise en place, Rangement, ...), absent certains jours. */
+export function GenericRoleRecapTable({
+  role,
+  occupancy,
+}: {
+  role: GenericRole
+  occupancy: Map<string, SlotOccupancy>
+}) {
+  const rows = JOURS.map((jour) => ({ jour, creneau: getGenericRoleCreneau(role, jour.id) })).filter(
     (row): row is { jour: (typeof JOURS)[number]; creneau: string } => Boolean(row.creneau),
   )
 
@@ -118,7 +124,7 @@ export function PrepaRecapTable({ occupancy }: { occupancy: Map<string, SlotOccu
             <tr key={jour.id}>
               <td className="whitespace-nowrap border border-border px-3 py-2 text-xs text-foreground">{jour.label}</td>
               <td className="whitespace-nowrap border border-border px-3 py-2 text-xs text-foreground">{creneau}</td>
-              <Cell occupancy={occupancy} poste={PREPA.label} jour={jour.label} creneau={creneau} />
+              <Cell occupancy={occupancy} poste={role.label} jour={jour.label} creneau={creneau} />
             </tr>
           ))}
         </tbody>

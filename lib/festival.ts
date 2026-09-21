@@ -118,7 +118,7 @@ export const POSTES = [
 export const PREPA = {
   id: "prepa",
   label: "Mise en place",
-  description: "Installation du stand avant l'ouverture au public",
+  description: "Installation avant l'ouverture au public",
 } as const
 
 // Créneau de mise en place par jour. Une clé absente signifie qu'il n'y a pas

@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { volunteerSignups } from "@/lib/db/schema"
-import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
+import { GENERIC_ROLES, JOURS, POSTES, getGenericRoleCreneau, getSlotCapacity } from "@/lib/festival"
 
 export type SlotOccupancy = {
   poste: string
@@ -39,15 +39,17 @@ export async function getSlotOccupancy(): Promise<Map<string, SlotOccupancy>> {
       }
     }
   }
-  for (const jour of JOURS) {
-    const prepaCreneau = getPrepaCreneau(jour.id)
-    if (!prepaCreneau) continue
-    occupancy.set(slotKey(PREPA.label, jour.label, prepaCreneau), {
-      poste: PREPA.label,
-      jour: jour.label,
-      creneau: prepaCreneau,
-      names: [],
-    })
+  for (const role of GENERIC_ROLES) {
+    for (const jour of JOURS) {
+      const creneau = getGenericRoleCreneau(role, jour.id)
+      if (!creneau) continue
+      occupancy.set(slotKey(role.label, jour.label, creneau), {
+        poste: role.label,
+        jour: jour.label,
+        creneau,
+        names: [],
+      })
+    }
   }
 
   for (const signup of signups) {

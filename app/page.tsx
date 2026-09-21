@@ -1,6 +1,6 @@
 import { SignupForm } from "@/components/signup-form"
-import { PrepaRecapTable, SlotsRecapTable } from "@/components/slots-recap-table"
-import { FESTIVAL, JOURS } from "@/lib/festival"
+import { GenericRoleRecapTable, SlotsRecapTable } from "@/components/slots-recap-table"
+import { FESTIVAL, GENERIC_ROLES, JOURS } from "@/lib/festival"
 import { getSlotOccupancy, occupancyToPlainNames } from "@/lib/signups"
 import { UtensilsCrossed } from "lucide-react"
 
@@ -46,17 +46,17 @@ export default async function Page() {
           <SlotsRecapTable occupancy={occupancy} />
         </section>
 
-        <section aria-labelledby="recap-prepa-title">
-          <div className="mb-4">
-            <h2 id="recap-prepa-title" className="font-serif text-2xl text-foreground">
-              Mise en place
-            </h2>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-              Installation du stand avant l&apos;ouverture au public.
-            </p>
-          </div>
-          <PrepaRecapTable occupancy={occupancy} />
-        </section>
+        {GENERIC_ROLES.map((role) => (
+          <section key={role.id} aria-labelledby={`recap-${role.id}-title`}>
+            <div className="mb-4">
+              <h2 id={`recap-${role.id}-title`} className="font-serif text-2xl text-foreground">
+                {role.label}
+              </h2>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{role.description}.</p>
+            </div>
+            <GenericRoleRecapTable role={role} occupancy={occupancy} />
+          </section>
+        ))}
 
         <SignupForm occupancy={occupancyNames} />
       </div>

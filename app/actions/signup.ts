@@ -3,20 +3,22 @@
 import { sql } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { volunteerSignups, type SignupSlot } from "@/lib/db/schema"
-import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
+import { GENERIC_ROLES, JOURS, POSTES, getGenericRoleCreneau, getSlotCapacity } from "@/lib/festival"
 
 // Clé arbitraire utilisée pour sérialiser les inscriptions via un advisory lock
 // Postgres, afin d'éviter que deux bénévoles ne prennent le même créneau en même temps.
 const SLOT_CAPACITY_LOCK_KEY = 841200193
 
 // Combinaisons exactes poste|jour|créneau autorisées, pour éviter qu'un poste
-// standard soit associé au créneau de mise en place (et inversement).
+// standard soit associé au créneau d'un rôle générique (et inversement).
 const VALID_SLOTS = new Set([
   ...POSTES.flatMap((p) => JOURS.flatMap((j) => j.creneaux.map((c) => `${p.label}|${j.label}|${c}`))),
-  ...JOURS.flatMap((j) => {
-    const prepaCreneau = getPrepaCreneau(j.id)
-    return prepaCreneau ? [`${PREPA.label}|${j.label}|${prepaCreneau}`] : []
-  }),
+  ...GENERIC_ROLES.flatMap((role) =>
+    JOURS.flatMap((j) => {
+      const creneau = getGenericRoleCreneau(role, j.id)
+      return creneau ? [`${role.label}|${j.label}|${creneau}`] : []
+    }),
+  ),
 ])
 
 export type SignupState = {

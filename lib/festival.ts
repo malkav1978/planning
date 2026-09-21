@@ -115,24 +115,48 @@ export const POSTES = [
   { id: "renfort", label: "Renfort", description: "Renfort pour les rushs" },
 ] as const
 
-export const PREPA = {
-  id: "prepa",
-  label: "Mise en place",
-  description: "Installation avant l'ouverture au public",
-} as const
+export type GenericRole = {
+  id: string
+  label: string
+  description: string
+  /** Créneau par jour pour ce rôle. Une clé absente = pas de créneau ce jour-là. */
+  creneaux: Partial<Record<JourId, string>>
+}
 
-// Créneau de mise en place par jour. Une clé absente signifie qu'il n'y a pas
-// de mise en place ce jour-là. Ce créneau générique coexiste, le samedi, avec
-// les besoins normaux par poste sur le même horaire (voir SLOT_CAPACITY_OVERRIDES) :
-// les deux appels à bénévoles sont distincts et se cumulent.
-export const PREPA_CRENEAUX: Partial<Record<JourId, string>> = {
-  ven: "18h00 – 20h00",
-  sam: "8h00 – 10h00",
+// Rôles génériques (non rattachés à un poste précis), proposés en plus des
+// besoins normaux par poste. Ils peuvent coexister avec un poste sur le même
+// horaire : un bénévole peut s'inscrire aux deux, ce sont des appels distincts.
+export const GENERIC_ROLES: GenericRole[] = [
+  {
+    id: "prepa",
+    label: "Mise en place",
+    description: "Installation avant l'ouverture au public",
+    creneaux: {
+      ven: "18h00 – 20h00",
+      sam: "8h00 – 10h00",
+    },
+  },
+  {
+    id: "rangement",
+    label: "Rangement",
+    description: "Rangement et nettoyage après la fermeture du festival",
+    creneaux: {
+      dim: "18h00 – 22h00",
+    },
+  },
+]
+
+/** Rétrocompatibilité : accès direct au rôle "Mise en place". */
+export const PREPA = GENERIC_ROLES[0]
+
+/** Créneau du rôle générique donné pour ce jour, ou undefined s'il n'y en a pas. */
+export function getGenericRoleCreneau(role: GenericRole, jourId: JourId): string | undefined {
+  return role.creneaux[jourId]
 }
 
 /** Créneau de mise en place pour ce jour, ou undefined s'il n'y en a pas. */
 export function getPrepaCreneau(jourId: JourId): string | undefined {
-  return PREPA_CRENEAUX[jourId]
+  return getGenericRoleCreneau(PREPA, jourId)
 }
 
 export const JOURS = [

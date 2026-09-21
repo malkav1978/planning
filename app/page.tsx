@@ -63,7 +63,7 @@ export default async function Page() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-3xl px-4 py-6 text-center text-sm text-muted-foreground sm:px-6">
-          Une question ? Contactez la coordination bénévoles du festival.
+          Une question&nbsp;? Contactez la coordination bénévoles du festival <a href="mailto:festival@droles-de-jeux.org">festival@droles-de-jeux.org</a>.
         </div>
       </footer>
     </main>

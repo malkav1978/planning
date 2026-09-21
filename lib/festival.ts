@@ -141,7 +141,8 @@ export const GENERIC_ROLES: GenericRole[] = [
     label: "Rangement",
     description: "Rangement et nettoyage après la fermeture du festival",
     creneaux: {
-      dim: "18h00 – 22h00",
+      dim: "18h00 – 20h00",
+      dim: "20h00 – 22h00",
     },
   },
 ]

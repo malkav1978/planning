@@ -160,20 +160,6 @@ export function getPrepaCreneau(jourId: JourId): string | undefined {
   return getGenericRoleCreneau(PREPA, jourId)
 }
 
-// Créneau de mise en place par jour. Une clé absente signifie qu'il n'y a pas
-// de mise en place ce jour-là. Ce créneau générique coexiste, le samedi, avec
-// les besoins normaux par poste sur le même horaire (voir SLOT_CAPACITY_OVERRIDES) :
-// les deux appels à bénévoles sont distincts et se cumulent.
-export const PREPA_CRENEAUX: Partial<Record<JourId, string>> = {
-  ven: "18h00 – 20h00",
-  sam: "8h00 – 10h00",
-}
-
-/** Créneau de mise en place pour ce jour, ou undefined s'il n'y en a pas. */
-export function getPrepaCreneau(jourId: JourId): string | undefined {
-  return PREPA_CRENEAUX[jourId]
-}
-
 export const JOURS = [
   {
     id: "ven",

@@ -2,7 +2,7 @@
 
 import { useActionState, useMemo, useState } from "react"
 import { useFormStatus } from "react-dom"
-import { JOURS, POSTES, PREPA, getPrepaCreneau, getSlotCapacity } from "@/lib/festival"
+import { GENERIC_ROLES, JOURS, POSTES, getGenericRoleCreneau, getSlotCapacity } from "@/lib/festival"
 import { submitSignup, type SignupState } from "@/app/actions/signup"
 import { Button } from "@/components/ui/button"
 import { Check, Loader2, MapPin, PartyPopper, X } from "lucide-react"
@@ -68,7 +68,7 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
           {state.message}
         </p>
         <p className="mt-4 text-sm text-muted-foreground">
-          Un coordinateur reviendra vers vous pour confirmer votre planning.
+          Les plannings peuvent évolués jusqu'au dernier moment, un coordinateur reviendra vers vous avec les détails de votre affectation.
         </p>
       </div>
     )
@@ -88,62 +88,67 @@ export function SignupForm({ occupancy }: { occupancy: Record<string, string[]> 
         </div>
 
         <div className="mb-4 grid gap-4">
-          <fieldset className="rounded-xl border border-dashed border-primary/40 bg-primary/5 p-4 sm:p-5">
-            <legend className="sr-only">{PREPA.label}</legend>
-            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-              <h3 className="font-serif text-lg text-card-foreground">{PREPA.label}</h3>
-              <span className="text-xs text-muted-foreground">{PREPA.description}</span>
-            </div>
+          {GENERIC_ROLES.map((role) => (
+            <fieldset
+              key={role.id}
+              className="rounded-xl border border-dashed border-primary/40 bg-primary/5 p-4 sm:p-5"
+            >
+              <legend className="sr-only">{role.label}</legend>
+              <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <h3 className="font-serif text-lg text-card-foreground">{role.label}</h3>
+                <span className="text-xs text-muted-foreground">{role.description}</span>
+              </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {JOURS.filter((jour) => getPrepaCreneau(jour.id)).map((jour) => {
-                const prepaCreneau = getPrepaCreneau(jour.id)!
-                const slot: Slot = { poste: PREPA.label, jour: jour.label, creneau: prepaCreneau }
-                const checked = selectedKeys.has(slotKey(slot))
-                const full = isFull(slot) && !checked
-                return (
-                  <div key={jour.id}>
-                    <p className="mb-2 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                      <MapPin className="size-3.5 text-primary" aria-hidden />
-                      {jour.label}
-                    </p>
-                    {full ? (
-                      <span className="flex items-center justify-between gap-2 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
-                        {prepaCreneau}
-                        <span className="text-xs font-medium">Complet</span>
-                      </span>
-                    ) : (
-                      <label
-                        className={`flex cursor-pointer items-center gap-2.5 rounded-md border px-3 py-2 text-sm transition-colors ${
-                          checked
-                            ? "border-primary bg-primary/10 text-foreground"
-                            : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          className="sr-only"
-                          checked={checked}
-                          onChange={() => toggle(slot)}
-                        />
-                        <span
-                          className={`flex size-4 shrink-0 items-center justify-center rounded border ${
-                            checked
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-input bg-background"
-                          }`}
-                          aria-hidden
-                        >
-                          {checked && <Check className="size-3" />}
+              <div className="grid gap-4 sm:grid-cols-2">
+                {JOURS.filter((jour) => getGenericRoleCreneau(role, jour.id)).map((jour) => {
+                  const creneau = getGenericRoleCreneau(role, jour.id)!
+                  const slot: Slot = { poste: role.label, jour: jour.label, creneau }
+                  const checked = selectedKeys.has(slotKey(slot))
+                  const full = isFull(slot) && !checked
+                  return (
+                    <div key={jour.id}>
+                      <p className="mb-2 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                        <MapPin className="size-3.5 text-primary" aria-hidden />
+                        {jour.label}
+                      </p>
+                      {full ? (
+                        <span className="flex items-center justify-between gap-2 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
+                          {creneau}
+                          <span className="text-xs font-medium">Complet</span>
                         </span>
-                        {prepaCreneau}
-                      </label>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </fieldset>
+                      ) : (
+                        <label
+                          className={`flex cursor-pointer items-center gap-2.5 rounded-md border px-3 py-2 text-sm transition-colors ${
+                            checked
+                              ? "border-primary bg-primary/10 text-foreground"
+                              : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            className="sr-only"
+                            checked={checked}
+                            onChange={() => toggle(slot)}
+                          />
+                          <span
+                            className={`flex size-4 shrink-0 items-center justify-center rounded border ${
+                              checked
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-input bg-background"
+                            }`}
+                            aria-hidden
+                          >
+                            {checked && <Check className="size-3" />}
+                          </span>
+                          {creneau}
+                        </label>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </fieldset>
+          ))}
 
           {POSTES.map((poste) => (
             <fieldset
